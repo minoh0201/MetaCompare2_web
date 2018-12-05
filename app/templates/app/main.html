@@ -1,5 +1,4 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -75,8 +74,10 @@
 				<!--  Main navigation  -->
 				<ul class="main-nav nav navbar-nav navbar-right">
 					<li><a href="#home">Home</a></li>
+
 					<li><a href="#about">About</a></li>
-					<li><a href="#portfolio">Upload</a></li>
+
+
 					<li><a href="#service">Services</a></li>
 					<li><a href="#pricing">Prices</a></li>
 					<li><a href="#team">Team</a></li>
@@ -85,7 +86,13 @@
 							<li><a href="blog-single.html">blog post</a></li>
 						</ul>
 					</li>
+
 					<li><a href="#contact">Contact</a></li>
+
+						{% if user.is_authenticated %}
+							<li><a href="#portfolio">Upload</a></li>
+							<li><a href="{% url 'logout' %}">Logout</a></li>
+						{% endif %}
 				</ul>
 				<!-- /Main navigation -->
 
@@ -104,7 +111,11 @@
 							<h1 class="white-text">MetaCompare</h1>
                             <h3 class="white-text">Prioritize <font color = red>resistome risks </font> represented by various environmental compartments
 							</h3>
-							<button class="white-btn">Login</button>
+								{% if user.is_authenticated %}
+								{% else %}
+									<a href="{% url 'login' %}"><button class="white-btn">Login</button></a>
+								{% endif %}
+
 							<a href="#about"><button class="main-btn">Learn more</button></a>
 						</div>
 					</div>
