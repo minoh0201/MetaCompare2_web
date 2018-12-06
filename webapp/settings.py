@@ -125,6 +125,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-LOGIN_REDIRECT_URL = '/metacmp'
+LOGIN_REDIRECT_URL = '/'
 
-LOGOUT_REDIRECT_URL = '/metacmp'
+LOGOUT_REDIRECT_URL = '/'
