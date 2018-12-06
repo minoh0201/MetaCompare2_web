@@ -25,7 +25,7 @@ SECRET_KEY = 'gv7a@^r68(@$t&03a$*l=hu93tv1ml_s4#202)&r=r0s)$^_w&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bench.cs.vt.edu/metacmp', 'localhost']
+ALLOWED_HOSTS = ['bench.cs.vt.edu', 'localhost']
 
 
 # Application definition
