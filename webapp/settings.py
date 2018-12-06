@@ -25,7 +25,7 @@ SECRET_KEY = 'gv7a@^r68(@$t&03a$*l=hu93tv1ml_s4#202)&r=r0s)$^_w&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bench.cs.vt.edu', 'localhost']
+ALLOWED_HOSTS = ['bench.cs.vt.edu/metacmp', 'localhost']
 
 
 # Application definition
@@ -124,6 +124,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_REDIRECT_URL='/'
+
+LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
