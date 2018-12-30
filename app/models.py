@@ -16,15 +16,32 @@ class Project(models.Model):
         return self.name
 
 def user_directory_path(instance, filename):
-    return 'data/{0}/{1}'.format(instance.user.id, filename)
+    return 'data/{0}/{1}/{2}'.format(instance.user.username, instance.project.name, filename)
 
 class Sample(models.Model):
+
+    #properties of a sample
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey(Project, related_name='samples', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     description = models.TextField()
-    file = models.FileField(upload_to=user_directory_path, null=True)
+    file = models.FileField(upload_to=user_directory_path, default='')
     created_date = models.DateTimeField(default=timezone.now)
+
+    #technical values of a sample
+    nContigs = models.IntegerField(default=0)
+    nARG = models.IntegerField(default=0)
+    nMGE = models.IntegerField(default=0)
+    nPAT = models.IntegerField(default=0)
+
+    qARG = models.FloatField(default=0.0)
+    qARG_MGE = models.FloatField(default=0.0)
+    qARG_MGE_PAT = models.FloatField(default=0.0)
+    risk_score = models.FloatField(default=0.0)
+
+    #Run status
+    stat = models.IntegerField(default=0)
+
 
     def publish(self):
         self.save()
@@ -41,3 +58,4 @@ class Document(models.Model):
 
     def __str__(self):
         return self.description
+

@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from .models import Project
 from .models import Sample
 
+from django.contrib.auth.decorators import login_required
+
 from .form import DocumentForm
 from .form import SampleForm
 
@@ -39,11 +41,40 @@ def model_form_upload(request):
 
 def sample_form_upload(request):
     if request.method == 'POST':
-        form = SampleForm(request.POST, request.FILES)
+        form = SampleForm(request.user.id, request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            f_saver = form.save(commit=False)
+            f_saver.user = request.user
+            f_saver.save()
             return redirect('main')
     else:
-        form = SampleForm()
+        form = SampleForm(request.user.id)
     return render(request, 'app/sample_form_upload.html', {'form': form})
 
+
+from django.forms import formset_factory
+#from app.form import SampleForm
+from django.views import View
+
+@login_required
+def sample_form_upload2(request):
+    Sample_FormSet = formset_factory(SampleForm)
+    if request.method == 'POST':
+        form = Sample_FormSet(request.POST, request.FILES, form_kwargs={'user_id': request.user.id})
+        if form.is_valid():
+            for sample in form:
+                s_saver = sample.save(commit=False)
+                s_saver.user = request.user
+                s_saver.save()
+            return redirect('main')
+    else:
+        form = Sample_FormSet(form_kwargs={'user_id': request.user.id})
+    return render(request, 'app/upload.html', {'sample_form': form})
+
+
+
+@login_required
+def my_project(request):
+    projects = Project.objects.filter(user_id = request.user.id)
+    #samples = Sample.objects.filter(user_id = request.user.id)
+    return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})

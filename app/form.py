@@ -1,6 +1,8 @@
 from django import forms
 from .models import Document
-from .models import Sample
+from .models import Sample, Project
+
+from django.forms import formset_factory
 
 class DocumentForm(forms.ModelForm):
     class Meta:
@@ -8,6 +10,13 @@ class DocumentForm(forms.ModelForm):
         fields = ('description', 'document', )
 
 class SampleForm(forms.ModelForm):
+    def __init__(self, user_id, *args, **kwargs):
+        super (SampleForm, self).__init__(*args, **kwargs)
+        self.fields['project'].queryset = Project.objects.filter(user_id = user_id)
     class Meta:
         model = Sample
-        fields = ('user', 'project', 'name', 'description', 'file', )
+        fields = ('project', 'name', 'file', )
+        labels = {
+            'name': "Sample name"
+        }
+
