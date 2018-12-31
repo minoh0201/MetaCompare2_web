@@ -95,9 +95,15 @@ def run(request, pk):
     sample = get_object_or_404(Sample, pk=pk)
     #runSample(sample.file)
 
-    path = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
-    subprocess.call(["head", path, ">", "test.txt"])
+    filepath = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
 
-    print(sample.file)
+    print(filepath)
+
+
+    destpath = "/".join(str(sample.file).split("/")[:-1])
+    destpath = os.path.join(destpath, "test.txt")
+
+    subprocess.call(["head", filepath, ">", destpath])
+
     return redirect('project')
 
