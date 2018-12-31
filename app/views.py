@@ -92,6 +92,9 @@ import os
 
 @login_required
 def run(request, pk):
+
+    subprocess.call(["echo", "'this is test'", ">", "/home/minoh/MetaCompare2_web/media/data/minoh/project1/test1.txt"])
+
     sample = get_object_or_404(Sample, pk=pk)
     #runSample(sample.file)
 
