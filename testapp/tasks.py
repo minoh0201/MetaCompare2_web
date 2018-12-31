@@ -9,3 +9,7 @@ def test(param):
 @shared_task
 def test2(param):
     return 'test2: "%s"' % param
+
+@shared_task
+def test3(param):
+    return 'test3: "%s"' % param
