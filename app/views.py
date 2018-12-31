@@ -17,6 +17,10 @@ def main(request):
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+#get object
+
+from django.shortcuts import get_object_or_404
+
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
@@ -78,3 +82,22 @@ def my_project(request):
     projects = Project.objects.filter(user_id = request.user.id)
     #samples = Sample.objects.filter(user_id = request.user.id)
     return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
+
+from testapp.tasks import runSample
+
+
+import subprocess
+import webapp.settings as SETTING
+import os
+
+@login_required
+def run(request, pk):
+    sample = get_object_or_404(Sample, pk=pk)
+    #runSample(sample.file)
+
+    path = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
+    subprocess.call(["head", path, ">", "test.txt"])
+
+    print(sample.file)
+    return redirect('project')
+
