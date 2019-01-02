@@ -90,7 +90,7 @@ def run(request, pk):
 
     sample = get_object_or_404(Sample, pk=pk)
 
-    runSample(sample)
+    runSample.delay(sample)
 
     return redirect('project')
 
