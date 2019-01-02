@@ -16,12 +16,12 @@ import webapp.settings as SETTING
 import os
 
 @shared_task
-def runSample(sample):
+def runSample(sample_file):
 
-    filepath = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
-    filename = str(sample.file).split("/")[-1]
+    filepath = os.path.join(SETTING.MEDIA_ROOT, sample_file)
+    filename = sample_file.split("/")[-1]
 
-    destpath = "/".join(str(sample.file).split("/")[:-1])
+    destpath = "/".join(sample_file.split("/")[:-1])
     destpath = os.path.join(destpath, filename + ".prodigal.fa")
     destpath = os.path.join(SETTING.MEDIA_ROOT, destpath)
 
