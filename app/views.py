@@ -85,28 +85,12 @@ def my_project(request):
 
 from testapp.tasks import runSample
 
-
-import subprocess
-import webapp.settings as SETTING
-import os
-
 @login_required
 def run(request, pk):
 
-    subprocess.call(["echo", "'this is test'", ">", "/home/minoh/MetaCompare2_web/media/data/minoh/project1/test1.txt"])
-
     sample = get_object_or_404(Sample, pk=pk)
-    #runSample(sample.file)
 
-    filepath = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
-
-    print(filepath)
-
-
-    destpath = "/".join(str(sample.file).split("/")[:-1])
-    destpath = os.path.join(destpath, "test.txt")
-
-    subprocess.call(["head", filepath, ">", destpath])
+    runSample(sample)
 
     return redirect('project')
 

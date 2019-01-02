@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+import os
+
 from pathlib import Path
 
 # Create your models here.
@@ -18,6 +20,7 @@ class Project(models.Model):
         return self.name
 
 def user_directory_path(instance, filename):
+    os.path.join("")
     return 'data/{0}/{1}/{2}'.format(instance.user.username, instance.project.name, filename)
 
 class Sample(models.Model):

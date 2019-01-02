@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 from celery import shared_task
 
-import subprocess
 
 @shared_task
 def test(param):
@@ -16,9 +15,23 @@ def test2(param):
 def test3(param):
     return 'test3: "%s"' % param
 
+import subprocess
+import webapp.settings as SETTING
+import os
+
 @shared_task
-def runSample(param):
-    subprocess.call(["head", param, ">", "test.txt"])
+def runSample(sample):
+
+    filepath = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
+    filename = str(sample.file).split("/")[-1]
+
+    destpath = "/".join(str(sample.file).split("/")[:-1])
+    destpath = os.path.join(destpath, filename + ".prodigal.fa")
+    destpath = os.path.join(SETTING.MEDIA_ROOT, destpath)
+
+    subprocess.call(["prodigal", "-i", filepath, "-d", destpath, "-p", "meta"])
+
+    return 'done'
 
 
 
