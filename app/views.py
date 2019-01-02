@@ -83,6 +83,9 @@ def my_project(request):
     #samples = Sample.objects.filter(user_id = request.user.id)
     return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
 
+import subprocess
+import webapp.settings as SETTING
+import os
 from testapp.tasks import runSample
 
 @login_required
@@ -90,7 +93,16 @@ def run(request, pk):
 
     sample = get_object_or_404(Sample, pk=pk)
 
-    runSample(sample)
+    #runSample(sample)
+
+    filepath = os.path.join(SETTING.MEDIA_ROOT, str(sample.file))
+    filename = str(sample.file).split("/")[-1]
+
+    destpath = "/".join(str(sample.file).split("/")[:-1])
+    destpath = os.path.join(destpath, filename + ".prodigal.fa")
+    destpath = os.path.join(SETTING.MEDIA_ROOT, destpath)
+
+    subprocess.call(["prodigal", "-i", filepath, "-d", destpath, "-p", "meta"])
 
     return redirect('project')
 
