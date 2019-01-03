@@ -10,7 +10,7 @@ from pathlib import Path
 class Project(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    #description = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
 
     def publish(self):
@@ -19,9 +19,17 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def clean(self):
+        if self.name:
+            self.name = self.name.strip().replace(' ', '')
+
+    def save(self, *args, **kwargs):
+        self.full_clean() # performs regular validation then clean()
+        super(Project, self).save(*args, **kwargs)
+
 def user_directory_path(instance, filename):
     os.path.join("")
-    return 'data/{0}/{1}/{2}'.format(instance.user.username, instance.project.name, filename)
+    return 'data/{0}/{1}/{2}/{3}'.format(instance.user.username, instance.project.name, instance.name, filename)
 
 class Sample(models.Model):
 
@@ -29,7 +37,7 @@ class Sample(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     project = models.ForeignKey(Project, related_name='samples', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    #description = models.TextField(default='')
     file = models.FileField(upload_to=user_directory_path, default='')
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -53,6 +61,14 @@ class Sample(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.name:
+            self.name = self.name.strip().replace(' ', '')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # performs regular validation then clean()
+        super(Sample, self).save(*args, **kwargs)
 
 
 #upload test
