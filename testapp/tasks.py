@@ -34,7 +34,7 @@ def runSample(sample_file):
     subprocess.call(["which", "python3"])
     subprocess.call(["python3", "--version"])
 
-    sys.path.append("/usr/local/bin")
+    sys.path.append("/home/minoh/anaconda3/bin/diamond")
     print(sys.path)
 
 
