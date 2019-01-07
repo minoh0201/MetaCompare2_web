@@ -16,8 +16,7 @@ import webapp.settings as SETTING
 import os
 
 @shared_task
-def runSample(sample):
-    sample_file = str(sample.file)
+def runSample(sample_file):
 
     sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
 

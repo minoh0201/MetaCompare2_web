@@ -124,7 +124,7 @@ def run(request, pk):
     sample.save()
 
     #queue: testapp.tasks (see tasks.py)
-    runSample.delay(sample)
+    runSample.delay(str(sample.file))
 
     return redirect('project')
 
