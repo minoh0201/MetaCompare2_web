@@ -23,10 +23,16 @@ def runSample(sample_file):
     filename_contig = sample_file.split("/")[-1]
     filename_prod = filename_contig + ".prodigal.fa"
     filename_prod_log = filename_contig + ".prodigal.fa.log"
+    filepath_output = os.path.join(sample_dir_path, "out.txt")
 
     filepath_contig = os.path.join(sample_dir_path, filename_contig)
     filepath_prod = os.path.join(sample_dir_path, filename_prod)
     filepath_prod_log = os.path.join(sample_dir_path, filename_prod_log)
+
+    #if output is already exist then remove old output
+    if os.path.isfile(filepath_output):
+        subprocess.call(["rm", filepath_output], shell=True)
+
 
     #run prodigal
     subprocess.call(["prodigal", "-i", filepath_contig, "-d", filepath_prod, "-p", "meta", "-o", filepath_prod_log])
