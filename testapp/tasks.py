@@ -22,11 +22,13 @@ def runSample(sample_file):
 
     filename_contig = sample_file.split("/")[-1]
     filename_prod = filename_contig + ".prodigal.fa"
+    filename_prod_log = filename_contig + ".prodigal.fa.log"
 
     filepath_contig = os.path.join(sample_dir_path, filename_contig)
     filepath_prod = os.path.join(sample_dir_path, filename_prod)
+    filepath_prod_log = os.path.join(sample_dir_path, filename_prod_log)
 
-    subprocess.call(["prodigal", "-i", filepath_contig, "-d", filepath_prod, "-p", "meta"])
+    subprocess.call(["prodigal", "-i", filepath_contig, "-d", filepath_prod, "-p", "meta", "-o", filepath_prod_log])
 
     subprocess.call(["metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path])
 
