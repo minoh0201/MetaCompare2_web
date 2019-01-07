@@ -142,9 +142,11 @@
                                 <td class="text-left">{{ sample.qARG_MGE_PAT }}</td>
                                 <td class="text-left">{{ sample.risk_score }}</td>
                                 <td class="text-left">
-
-                                    <a href="{% url 'run' pk=sample.pk %}"><i class="fa fa-play" style="font-size:24px"></i> Run</a>
-                                    <!--<i class="fa fa-spinner" style="font-size:24px"></i> Running -->
+                                    {% if sample.stat == 1 %}
+                                        <i class="fa fa-spinner" style="font-size:24px"></i> Running
+                                    {% else %}
+                                        <a href="{% url 'run' pk=sample.pk %}"><i class="fa fa-play" style="font-size:24px"></i> Run</a>
+                                    {% endif %}
                                 </td>
                                 <td class="text-left">
 
