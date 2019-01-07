@@ -18,7 +18,7 @@ import os
 @shared_task
 def runSample(sample_file):
 
-    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, sample_file.split("/")[:-1])
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
 
     filename_contig = sample_file.split("/")[-1]
     filename_prod = filename_contig + ".prodigal.fa"
