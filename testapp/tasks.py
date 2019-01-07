@@ -40,8 +40,11 @@ def runSample(sample_file):
 
 
     #subprocess.call(["python3", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path])
-    subprocess.Popen(["python3", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path],
-                     env = {'PYTHONPATH': os.pathsep.join(sys.path), 'PATH': os.pathsep.join(["/home/minoh/anaconda3/bin"])})
+    subprocess.Popen(["python", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path],
+                     env={'PYTHONPATH': "/home/minoh/anaconda3/bin",
+                          'PATH': "/home/minoh/anaconda3/bin"})
+                     #env = {'PYTHONPATH': os.pathsep.join(sys.path), 'PATH': os.pathsep.join(["/home/minoh/anaconda3/bin"])})
+
     return 'done'
 
 
