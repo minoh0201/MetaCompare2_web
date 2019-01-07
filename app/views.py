@@ -80,7 +80,36 @@ def sample_form_upload2(request):
 @login_required
 def my_project(request):
     projects = Project.objects.filter(user_id = request.user.id)
-    #samples = Sample.objects.filter(user_id = request.user.id)
+    samples = Sample.objects.filter(user_id = request.user.id)
+    for sample in samples:
+        # if sample is in running stage
+        if sample.stat == 1:
+            # get path to the result file
+            sample_file = str(sample.file)
+            sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+            filepath_output = os.path.join(sample_dir_path, "out.txt")
+            # if result file exists, copy results to the sample instance
+            if os.path.isfile(filepath_output):
+                with open(filepath_output, "r") as f:
+                    res = f.readlines()[0].split(',')
+                    vals = {"nContigs": res[0], "nARG": res[1], "nMGE": res[2], "nPAT": res[3],
+                            "nARG_MGE": res[4], "nARG_MGE_PAT": res[5],
+                            "fARG": res[6], "fMGE": res[7], "fPAT": res[8],
+                            "fARG_MGE": res[9], "fARG_MGE_PAT": res[10],
+                            "score": res[11],
+                            }
+
+                    sample.nContigs = int(vals['nContigs'])
+                    sample.nARG = int(vals['nARG'])
+                    sample.nMGE = int(vals['nMGE'])
+                    sample.nPAT = int(vals['nPAT'])
+                    sample.qARG = float(vals['fARG'])
+                    sample.qARG_MGE = float(vals['fARG_MGE'])
+                    sample.qARG_MGE_PAT = float(vals['fARG_MGE_PAT'])
+                    sample.risk_score = float(vals['score'])
+                    sample.stat = 2
+                    sample.save()
+
     return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
 
 from testapp.tasks import runSample
