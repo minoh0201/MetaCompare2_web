@@ -34,6 +34,8 @@ def runSample(sample_file):
     subprocess.call(["which", "python3"])
     subprocess.call(["python3", "--version"])
 
+    print(sys.path)
+
     #subprocess.call(["python3", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path])
     subprocess.Popen(["python3", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path],
                      env = {'PYTHONPATH': os.pathsep.join(sys.path)})
