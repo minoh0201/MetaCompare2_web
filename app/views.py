@@ -103,10 +103,10 @@ def my_project(request):
                     sample.nARG = int(vals['nARG'])
                     sample.nMGE = int(vals['nMGE'])
                     sample.nPAT = int(vals['nPAT'])
-                    sample.qARG = float(vals['fARG'])
-                    sample.qARG_MGE = float(vals['fARG_MGE'])
-                    sample.qARG_MGE_PAT = float(vals['fARG_MGE_PAT'])
-                    sample.risk_score = float(vals['score'])
+                    sample.qARG = float(format(vals['fARG'], '.8f'))
+                    sample.qARG_MGE = float(format(vals['fARG_MGE'], '.8f'))
+                    sample.qARG_MGE_PAT = float(format(vals['fARG_MGE_PAT'], '.8f'))
+                    sample.risk_score = float(format(vals['score'], '.2f'))
                     sample.stat = 2
                     sample.save()
 
