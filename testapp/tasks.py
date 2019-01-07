@@ -31,7 +31,7 @@ def runSample(sample_file):
 
     #if output is already exist then remove old output
     if os.path.isfile(filepath_output):
-        subprocess.call(["rm", filepath_output], shell=True)
+        subprocess.call(["rm", "-f", filepath_output])
 
 
     #run prodigal
