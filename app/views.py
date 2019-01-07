@@ -70,7 +70,7 @@ def sample_form_upload2(request):
                 s_saver = sample.save(commit=False)
                 s_saver.user = request.user
                 s_saver.save()
-            return redirect('main')
+            return redirect('project')
     else:
         form = Sample_FormSet(form_kwargs={'user_id': request.user.id})
     return render(request, 'app/upload.html', {'sample_form': form})
@@ -89,8 +89,29 @@ from testapp.tasks import runSample
 def run(request, pk):
 
     sample = get_object_or_404(Sample, pk=pk)
+    sample.stat = 1
+    sample.save()
 
-    runSample.delay(str(sample.file))
+    #queue: testapp.tasks (see tasks.py)
+    vals = runSample.delay(str(sample.file))
+
+    # vals = {"nContigs": res[0], "nARG": res[1], "nMGE": res[2], "nPAT": res[3],
+    #         "nARG_MGE": res[4], "nARG_MGE_PAT": res[5],
+    #         "fARG": res[6], "fMGE": res[7], "fPAT": res[8],
+    #         "fARG_MGE": res[9], "fARG_MGE_PAT": res[10],
+    #         "score": res[11],
+    #         }
+
+    sample.nContigs = int(vals['nContigs'])
+    sample.nARG = int(vals['nARG'])
+    sample.nMGE = int(vals['nMGE'])
+    sample.nPAT = int(vals['nPAT'])
+    sample.qARG = float(vals['fARG'])
+    sample.qARG_MGE = float(vals['fARG_MGE'])
+    sample.qARG_MGE_PAT = float(vals['fARG_MGE_PAT'])
+    sample.risk_score = float(vals['score'])
+    sample.stat = 2
+    sample.save()
 
     return redirect('project')
 
