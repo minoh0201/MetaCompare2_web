@@ -31,6 +31,7 @@ def runSample(sample_file):
     subprocess.call(["prodigal", "-i", filepath_contig, "-d", filepath_prod, "-p", "meta", "-o", filepath_prod_log])
 
     subprocess.call(["which", "python"])
+    subprocess.call(["python", "--version"])
 
     subprocess.call(["python", "/home/minoh/MetaCompare2_cmd/metacmp2.py", "-c", filepath_contig, "-g", filepath_prod, "-o", sample_dir_path])
 
