@@ -84,6 +84,8 @@ def my_project(request):
     return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
 
 from testapp.tasks import runSample
+import webapp.settings as SETTING
+import os
 
 @login_required
 def run(request, pk):
@@ -93,25 +95,30 @@ def run(request, pk):
     sample.save()
 
     #queue: testapp.tasks (see tasks.py)
-    vals = runSample.delay(str(sample.file))
+    runSample.delay(str(sample.file))
 
-    # vals = {"nContigs": res[0], "nARG": res[1], "nMGE": res[2], "nPAT": res[3],
-    #         "nARG_MGE": res[4], "nARG_MGE_PAT": res[5],
-    #         "fARG": res[6], "fMGE": res[7], "fPAT": res[8],
-    #         "fARG_MGE": res[9], "fARG_MGE_PAT": res[10],
-    #         "score": res[11],
-    #         }
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(str(sample.file).split("/")[:-1]))
+    filepath_output = os.path.join(sample_dir_path, "out.txt")
 
-    sample.nContigs = int(vals['nContigs'])
-    sample.nARG = int(vals['nARG'])
-    sample.nMGE = int(vals['nMGE'])
-    sample.nPAT = int(vals['nPAT'])
-    sample.qARG = float(vals['fARG'])
-    sample.qARG_MGE = float(vals['fARG_MGE'])
-    sample.qARG_MGE_PAT = float(vals['fARG_MGE_PAT'])
-    sample.risk_score = float(vals['score'])
-    sample.stat = 2
-    sample.save()
+    with open(filepath_output, "r") as f:
+        res = f.readlines()[0].split(',')
+        vals = {"nContigs": res[0], "nARG": res[1], "nMGE": res[2], "nPAT": res[3],
+                "nARG_MGE": res[4], "nARG_MGE_PAT": res[5],
+                "fARG": res[6], "fMGE": res[7], "fPAT": res[8],
+                "fARG_MGE": res[9], "fARG_MGE_PAT": res[10],
+                "score": res[11],
+                }
+
+        sample.nContigs = int(vals['nContigs'])
+        sample.nARG = int(vals['nARG'])
+        sample.nMGE = int(vals['nMGE'])
+        sample.nPAT = int(vals['nPAT'])
+        sample.qARG = float(vals['fARG'])
+        sample.qARG_MGE = float(vals['fARG_MGE'])
+        sample.qARG_MGE_PAT = float(vals['fARG_MGE_PAT'])
+        sample.risk_score = float(vals['score'])
+        sample.stat = 2
+        sample.save()
 
     return redirect('project')
 
