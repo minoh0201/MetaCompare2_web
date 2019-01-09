@@ -134,6 +134,12 @@ ul, ol {
     padding-bottom: 60px;
 }
 
+.short-padding {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}
+
 
 /* --  background section  -- */
 
@@ -1927,4 +1933,13 @@ td.text-center {
 
 td.text-right {
   text-align: right;
+}
+
+.object-tools {
+    font-size: 10px;
+    font-weight: bold;
+    padding-left: 0;
+    float: right;
+    position: relative;
+    margin-top: 48px;
 }

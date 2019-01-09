@@ -86,7 +86,6 @@
 
 						{% if user.is_authenticated %}
 							<li><a href="{% url 'project' %}">My Project</a></li>
-							<li><a href="{% url 'upload' %}">Upload</a></li>
 							<li><a href="{% url 'logout' %}">Logout</a></li>
 						{% endif %}
 				</ul>
@@ -97,9 +96,26 @@
 		<!-- /Nav -->
 
     <!-- project -->
-        {% for project in projects %}
-            {{ project.samples.all }}
-        {% endfor %}
+        <div class="header-wrapper short-padding bg-grey">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="{% url 'upload' %}">
+                        <button type="button" class="btn btn-info">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Upload Samples
+                        </button>
+                    </a>
+                </div>
+                <div class="breadcrumb">
+                    <a href="{% url 'add_project' %}">
+                        <button type="button" class="btn btn-info">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Add Project
+                        </button>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
 
         {% for project in projects %}
         <div class="blog-author">
@@ -126,7 +142,7 @@
                                 <th class="text-left">Q(ARG, MGE, PAT)</th>
                                 <th class="text-left">Risk Score</th>
                                 <th class="text-left">Run Analysis</th>
-                                <th class="text-left">Visualization</th>
+                                <!--<th class="text-left">Visualization</th>-->
                                 <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -150,9 +166,9 @@
                                         <a href="{% url 'run' pk=sample.pk %}"><i class="fa fa-play" style="font-size:24px"></i> Run</a>
                                     {% endif %}
                                 </td>
-                                <td class="text-left">
+                                <!--<td class="text-left">
 
-                                </td>
+                                </td>-->
                                 <td class="text-left"></td>
 
                             </tr>

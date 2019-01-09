@@ -20,3 +20,11 @@ class SampleForm(forms.ModelForm):
             'name': "Sample name"
         }
 
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ('name',)
+        labels = {
+            'name': "Project name"
+        }
+

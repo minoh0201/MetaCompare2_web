@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .form import DocumentForm
 from .form import SampleForm
+from .form import ProjectForm
 
 # Create your views here.
 
@@ -128,3 +129,29 @@ def run(request, pk):
 
     return redirect('project')
 
+
+@login_required
+def add_project(request):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('project')
+    else:
+        form = ProjectForm()
+    return render(request, 'app/add_project.html', {'form': form})
+
+
+
+    # if request.method == 'POST':
+    #     form = Sample_FormSet(request.POST, request.FILES, form_kwargs={'user_id': request.user.id})
+    #     if form.is_valid():
+    #         for sample in form:
+    #             s_saver = sample.save(commit=False)
+    #             s_saver.user = request.user
+    #             s_saver.save()
+    #         return redirect('project')
+    # else:
+    #     form = Sample_FormSet(form_kwargs={'user_id': request.user.id})

@@ -36,45 +36,13 @@
 	<![endif]-->
 </head>
 <body>
-
-
-
-<script src = "{% static 'js/jquery.min.js' %}"></script>
-<script src = "{% static 'js/jquery.formset.js' %}"></script>
-<div class="upload-page">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset>
-                <h3>Upload Samples</h3>
-            <font color = black>
-                <p>MetaCompare requires a FASTA file derived from an assembly pipeline (trimmomatic + IDBA-UD) for each sample as input.</p>
-                <p>If you have raw reads (FASTQ format) you can submit them to MetaStorm (<a href="http://bench.cs.vt.edu/MetaStorm/">http://bench.cs.vt.edu/MetaStorm/</a>) and run assembly pipeline to get assembled contigs as a FASTA file. </p>
-                <p>The input files we need can be downloaded from MetaStorm by clicking "Scaffolds" button </p>
-            </font>
-            <div>
-                {{ sample_form.management_form }}
-                {% for sample in sample_form %}
-                <div class = "link-formset">
-                    <hr>
-                    {{ sample.as_p }}
-                </div>
-                {% endfor %}
-            </div>
-        </fieldset>
-        <hr>
-        <button class="main-btn" type="submit">Upload</button>
-    </form>
-
-    <script>
-        $('.link-formset').formset({
-            addText: 'Add more samples',
-            deleteText: 'remove sample <br>'
-        });
-    </script>
-
-    <p><br><a href = "{% url 'main' %}">Return to home</a></p>
-</div>
+    <div class="upload-page">
+        <h3>Create a New Project</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="main-btn" type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
-
-
