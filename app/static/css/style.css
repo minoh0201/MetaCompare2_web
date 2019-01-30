@@ -1217,7 +1217,8 @@ header {
     text-align: center;
     line-height: 24px;
     border-radius: 3px;
-    margin-left: 5px;
+    margin-left: 0px;
+    margin-right: 28px;
     color: #FFF;
     background-color: #6195FF;
 }

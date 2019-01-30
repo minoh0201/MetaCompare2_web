@@ -155,3 +155,26 @@ def add_project(request):
     #         return redirect('project')
     # else:
     #     form = Sample_FormSet(form_kwargs={'user_id': request.user.id})
+
+import csv
+from django.http import HttpResponse
+
+@login_required
+def export_project_csv(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    samples = Sample.objects.filter(project=pk)
+
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = 'attachment; filename=' + project.name + '.csv'
+
+    writer = csv.writer(response)
+    writer.writerow(['Sample_name', '#Contigs', '#ARG', '#MGE', '#PAT', '#Q(ARG)', '#Q(ARG_MGE)', '#Q(ARG_MGE_PAT)', 'Risk_Score'])
+
+    for sample in samples:
+        # print(sample, sample.nContigs, sample.nARG, sample.nMGE, sample.nPAT, sample.qARG, sample.qARG_MGE, sample.qARG_MGE_PAT, sample.risk_score)
+        row = [sample, sample.nContigs, sample.nARG, sample.nMGE, sample.nPAT, sample.qARG, sample.qARG_MGE,
+               sample.qARG_MGE_PAT, sample.risk_score]
+        writer.writerow([str(x) for x in row])
+
+    return response
