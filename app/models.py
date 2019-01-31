@@ -54,7 +54,7 @@ class Sample(models.Model):
     name = models.CharField(max_length=200)
     #description = models.TextField(default='')
     file = models.FileField(upload_to=user_directory_path, default='')
-    directory = models.FileField(default='', blank=True)
+    #directory = models.FileField(default='', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
     #technical values of a sample
