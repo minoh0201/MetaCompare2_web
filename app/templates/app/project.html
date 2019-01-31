@@ -37,8 +37,11 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
 </head>
 <body>
+
 		<!-- Nav -->
 		<nav id="nav" class="navbar">
 			<div class="container">
@@ -117,6 +120,14 @@
 
         </div>
 
+        {% if not projects %}
+            <div class="blog-author">
+
+                <center><h4>No project exists. Please add project to start !</h4></center>
+            </div>
+
+        {% endif %}
+
         {% for project in projects %}
         <div class="blog-author">
             <div class="media">
@@ -129,7 +140,7 @@
                                     <i class="fa fa-file-text" style="font-size:24px"></i>
                                 </button>
                             </a>
-                            <a href="#">
+                            <a class="confirm-delete" href="{% url 'project_remove' pk=project.pk %}">
                                 <button type="button" class="btn btn-default" title="Delete Project">
                                     <i class="fa fa-trash" style="font-size:24px"></i>
                                 </button>
@@ -183,9 +194,11 @@
 
                                 </td>-->
                                 <td class="text-left">
-                                    <button type="button" class="btn btn-default">
-                                        <i class="fa fa-trash" style="font-size:16px"></i>
-                                    </button>
+                                    <a class="confirm-delete" href="{% url 'sample_remove' pk=sample.pk %}">
+                                        <button type="button" class="btn btn-default">
+                                            <i class="fa fa-trash" style="font-size:16px"></i>
+                                        </button>
+                                    </a>
                                 </td>
 
                             </tr>
@@ -201,6 +214,8 @@
 
 
         {% endfor %}
+
+
 
 
     <!-- footer -->
@@ -259,6 +274,8 @@
 	<div id="back-to-top"></div>
 	<!-- /Back to top -->
 
-
+    <script>
+    $(document).on('click', '.confirm-delete', function(){ return confirm('Are you sure you want to delete?'); })
+    </script>
 </body>
 </html>

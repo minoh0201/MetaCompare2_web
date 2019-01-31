@@ -178,3 +178,16 @@ def export_project_csv(request, pk):
         writer.writerow([str(x) for x in row])
 
     return response
+
+
+@login_required
+def sample_remove(request, pk):
+    sample = get_object_or_404(Sample, pk=pk)
+    sample.delete()
+    return redirect('project')
+
+@login_required
+def project_remove(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.delete()
+    return redirect('project')
