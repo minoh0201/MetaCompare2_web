@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'gv7a@^r68(@$t&03a$*l=hu93tv1ml_s4#202)&r=r0s)$^_w&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['bench.cs.vt.edu', 'localhost', 'deep.cs.vt.edu', 'metacmp.cs.vt.edu', '127.0.0.1']
 
