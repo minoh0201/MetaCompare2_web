@@ -5,6 +5,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 import os
+import webapp.settings as SETTING
 
 from pathlib import Path
 
@@ -89,8 +90,17 @@ class Sample(models.Model):
 
 @receiver(post_delete, sender=Sample)
 def sample_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
-    instance.directory.delete(False)
+    # instance.file.delete(False)
+    # instance.directory.delete(False)
+    # print(instance.directory)
+    # print(type(instance.directory))
+    # print(instance.directory.name)
+    # print(type(instance.directory.name))
+
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, instance.directory.name)
+    print(sample_dir_path)
+    if os.path.isdir(sample_dir_path):
+        subprocess.call(["rm", "-rf", sample_dir_path])
 
 @receiver(post_delete, sender=Project)
 def project_delete(sender, instance, **kwargs):
