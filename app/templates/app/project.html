@@ -135,11 +135,19 @@
                     <div class="media-heading">
                         <h3>{{ project }}</h3>
                         <div class="author-social">
+                            <!--Run All-->
+                            <a href="{% url 'run_all' pk=project.pk %}" title="Run all samples">
+                                <button type="button" class="btn btn-default">
+                                    <i class="fa fa-play" style="font-size:24px"></i>
+                                </button>
+                            </a>
+                            <!--Download as a CSV file-->
                             <a href="{% url 'export_csv' pk=project.pk %}">
                                 <button type="button" class="btn btn-default" title="Download as a CSV file">
                                     <i class="fa fa-file-text" style="font-size:24px"></i>
                                 </button>
                             </a>
+                            <!--Delete Project-->
                             <a class="confirm-delete" href="{% url 'project_remove' pk=project.pk %}">
                                 <button type="button" class="btn btn-default" title="Delete Project">
                                     <i class="fa fa-trash" style="font-size:24px"></i>
@@ -181,7 +189,26 @@
                                 <td class="text-left">{{ sample.risk_score }}</td>
                                 <td class="text-left">
                                     {% if sample.stat == 1 %}
-                                        <i class="fa fa-spinner" style="font-size:16px"></i> Running
+                                        <div class="loader loader--style8" title="Running">
+                                          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                                            <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+                                              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                            </rect>
+                                            <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+                                              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                            </rect>
+                                            <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+                                              <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                              <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                            </rect>
+                                          </svg>
+                                        </div>
                                     {% else %}
                                         <a href="{% url 'run' pk=sample.pk %}">
                                             <button type="button" class="btn btn-default">

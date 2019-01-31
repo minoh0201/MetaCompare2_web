@@ -130,6 +130,19 @@ def run(request, pk):
 
     return redirect('project')
 
+@login_required
+def run_all(request, pk):
+    samples = Sample.objects.filter(project=pk)
+    for sample in samples:
+        if sample.stat == 0:
+            sample.stat = 1
+            sample.save()
+
+            # queue: testapp.tasks (see tasks.py)
+            runSample.delay(str(sample.file))
+    return redirect('project')
+
+
 
 @login_required
 def add_project(request):

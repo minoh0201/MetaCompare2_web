@@ -47,9 +47,12 @@
         <fieldset>
                 <h3>Upload Samples</h3>
             <font color = black>
-                <p>MetaCompare requires a FASTA file derived from an assembly pipeline (trimmomatic + IDBA-UD) for each sample as input.</p>
-                <p>If you have raw reads (FASTQ format) you can submit them to MetaStorm (<a href="http://bench.cs.vt.edu/MetaStorm/">http://bench.cs.vt.edu/MetaStorm/</a>) and run assembly pipeline to get assembled contigs as a FASTA file. </p>
-                <p>The input files we need can be downloaded from MetaStorm by clicking "Scaffolds" button </p>
+                <p>- Upload a FASTA file containing assembled sequences for each sample. </p>
+                <p>- If you have raw reads (FASTQ format) you can submit them to MetaStorm (<a href="http://bench.cs.vt.edu/MetaStorm/">http://bench.cs.vt.edu/MetaStorm/</a>) and run assembly pipeline to get assembled contigs as a FASTA file. The input files we need can be downloaded from MetaStorm by clicking "Scaffolds" buttons</p>
+                <p><b>*Warning*</b> MetaCompareWeb has been tested only on inputs derived from "trimmomatic + IDBA-UD" assembly pipeline for Illumina WGS files. </p>
+
+
+
             </font>
             <div>
                 {{ sample_form.management_form }}
