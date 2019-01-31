@@ -91,15 +91,9 @@ class Sample(models.Model):
 
 @receiver(post_delete, sender=Sample)
 def sample_delete(sender, instance, **kwargs):
-    # instance.file.delete(False)
-    # instance.directory.delete(False)
-    # print(instance.directory)
-    # print(type(instance.directory))
-    # print(instance.directory.name)
-    # print(type(instance.directory.name))
 
-    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, instance.directory.name)
-    print(sample_dir_path)
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(instance.file.name.split("/")[:-1]))
+    
     if os.path.isdir(sample_dir_path):
         subprocess.call(["rm", "-rf", sample_dir_path])
 
