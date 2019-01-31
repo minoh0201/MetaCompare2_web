@@ -56,7 +56,6 @@ class Sample(models.Model):
     name = models.CharField(max_length=200)
     #description = models.TextField(default='')
     file = models.FileField(upload_to=user_directory_path, default='')
-    directory = models.FileField(default='', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
 
     #technical values of a sample
@@ -93,7 +92,7 @@ class Sample(models.Model):
 def sample_delete(sender, instance, **kwargs):
 
     sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(instance.file.name.split("/")[:-1]))
-    
+
     if os.path.isdir(sample_dir_path):
         subprocess.call(["rm", "-rf", sample_dir_path])
 
