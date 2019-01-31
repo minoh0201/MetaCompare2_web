@@ -18,7 +18,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     #description = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
-    dir_path = models.FileField(upload_to=user_project_path, default='', blank=True)
+    #dir_path = models.FileField(upload_to=user_project_path, default='', blank=True)
 
     def publish(self):
         self.save()
