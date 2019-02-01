@@ -35,6 +35,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
 
@@ -51,9 +52,7 @@
                 <p>- Upload a FASTA file containing assembled sequences for each sample. </p>
                 <p>- If you have raw reads (FASTQ format) you can submit them to MetaStorm (<a href="http://bench.cs.vt.edu/MetaStorm/">http://bench.cs.vt.edu/MetaStorm/</a>) and run assembly pipeline to get assembled contigs as a FASTA file. The input files we need can be downloaded from MetaStorm by clicking "Scaffolds" buttons</p>
                 <p><b>*Warning*</b> MetaCompareWeb has been tested only on inputs derived from "trimmomatic + IDBA-UD" assembly pipeline for Illumina WGS files. </p>
-
-
-
+                
             </font>
             <div>
                 {{ sample_form.management_form }}
@@ -68,11 +67,24 @@
         <hr>
         <button class="main-btn" type="submit">Upload</button>
     </form>
-
-
+        <button class="main-btn" type="button" id="wait">Please wait...</button>
     <script>
-    $(document).on('click', '.main-btn', function(){ document.getElementByClassName("main-btn")[0].disabled = true; return; })
+    $(document).ready(function(){
+
+        $("#wait").hide();
+
+        $("button:submit").click(function(){
+            $(this).hide();
+            $("#wait").show().attr('disabled', true);
+        });
+
+    });
     </script>
+    <!---->
+    <!---->
+        <!--$("button").click(function(){-->
+            <!--$(this).attr('disabled', true);-->
+        <!--});-->
 
     <script>
         $('.link-formset').formset({
