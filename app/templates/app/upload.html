@@ -34,6 +34,7 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+
 </head>
 <body>
 
@@ -68,11 +69,17 @@
         <button class="main-btn" type="submit">Upload</button>
     </form>
 
+
+    <script>
+    $(document).on('click', '.main-btn', function(){ document.getElementByClassName("main-btn")[0].disabled = true; return; })
+    </script>
+
     <script>
         $('.link-formset').formset({
             addText: 'Add more samples',
             deleteText: 'remove sample <br>'
         });
+
     </script>
 
     <p><br><a href = "{% url 'main' %}">Return to home</a></p>
