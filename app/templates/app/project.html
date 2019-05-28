@@ -186,7 +186,13 @@
                                 <td class="text-left">{{ sample.qARG }}</td>
                                 <td class="text-left">{{ sample.qARG_MGE }}</td>
                                 <td class="text-left">{{ sample.qARG_MGE_PAT }}</td>
-                                <td class="text-left">{{ sample.risk_score }}</td>
+                                <td class="text-left">
+                                    {% if sample.qARG >= 0.01 %}
+                                        Immeasurable
+                                    {% else %}
+                                        {{ sample.risk_score }}
+                                    {% endif %}
+                                </td>
                                 <td class="text-left">
                                     {% if sample.stat == 1 %}
                                         <div class="loader loader--style2" title="Running">
