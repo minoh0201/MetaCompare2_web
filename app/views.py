@@ -195,9 +195,15 @@ def export_project_csv(request, pk):
     writer.writerow(['Sample_name', '#Contigs', '#ARG', '#MGE', '#PAT', '#Q(ARG)', '#Q(ARG_MGE)', '#Q(ARG_MGE_PAT)', 'Risk_Score'])
 
     for sample in samples:
+        # check if it is immeasurable or not
+        if sample.risk_score == 0.0001:
+            risk_score = 'Immeasurable'
+        else:
+            risk_score = sample.risk_score
+
         # print(sample, sample.nContigs, sample.nARG, sample.nMGE, sample.nPAT, sample.qARG, sample.qARG_MGE, sample.qARG_MGE_PAT, sample.risk_score)
         row = [sample, sample.nContigs, sample.nARG, sample.nMGE, sample.nPAT, sample.qARG, sample.qARG_MGE,
-               sample.qARG_MGE_PAT, sample.risk_score]
+               sample.qARG_MGE_PAT, risk_score]
         writer.writerow([str(x) for x in row])
 
     return response
