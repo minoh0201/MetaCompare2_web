@@ -187,7 +187,7 @@
                                 <td class="text-left">{{ sample.qARG_MGE }}</td>
                                 <td class="text-left">{{ sample.qARG_MGE_PAT }}</td>
                                 <td class="text-left">
-                                    {% if sample.qARG >= 0.01 %}
+                                    {% if sample.risk_score == 0.0001 %}
                                         Immeasurable
                                     {% else %}
                                         {{ sample.risk_score }}

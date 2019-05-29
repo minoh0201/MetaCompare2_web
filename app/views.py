@@ -9,6 +9,8 @@ from .form import DocumentForm
 from .form import SampleForm
 from .form import ProjectForm
 
+import math
+
 
 # Create your views here.
 
@@ -105,10 +107,17 @@ def my_project(request):
                     sample.nARG = int(vals['nARG'])
                     sample.nMGE = int(vals['nMGE'])
                     sample.nPAT = int(vals['nPAT'])
-                    sample.qARG = float(format(float(vals['fARG']), '.8f'))
-                    sample.qARG_MGE = float(format(float(vals['fARG_MGE']), '.8f'))
-                    sample.qARG_MGE_PAT = float(format(float(vals['fARG_MGE_PAT']), '.8f'))
-                    sample.risk_score = float(format(float(vals['score']), '.2f'))
+                    sample.qARG = qARG = float(format(float(vals['fARG']), '.8f'))
+                    sample.qARG_MGE = qARG_MGE = float(format(float(vals['fARG_MGE']), '.8f'))
+                    sample.qARG_MGE_PAT = qARG_MGE_PAT = float(format(float(vals['fARG_MGE_PAT']), '.8f'))
+
+                    # check validity of risk score by calculating distance and observing whether it is less than 0.01
+                    dist = math.sqrt((0.01-qARG)**2 + (0.01-qARG_MGE)**2 + (0.01-qARG_MGE_PAT)**2)
+                    if dist <= 0.01:
+                        sample.risk_score = 0.0001
+                    else:
+                        sample.risk_score = float(format(float(vals['score']), '.2f'))
+
                     sample.stat = 2
                     sample.save()
 
