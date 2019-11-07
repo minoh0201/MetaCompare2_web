@@ -129,14 +129,11 @@ import os
 
 @login_required
 def run(request, pk):
-
     sample = get_object_or_404(Sample, pk=pk)
     sample.stat = 1
     sample.save()
-
     #queue: testapp.tasks (see tasks.py)
     runSample.delay(str(sample.file))
-
     return redirect('project')
 
 @login_required
@@ -220,3 +217,165 @@ def project_remove(request, pk):
     project = get_object_or_404(Project, pk=pk)
     project.delete()
     return redirect('project')
+
+import pandas as pd
+import numpy as np
+import operator
+
+from Bio import SeqIO
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+
+@login_required
+def display_all_scaffolds(request, pk):
+
+    sample = get_object_or_404(Sample, pk=pk)
+    sample_file = str(sample.file)
+    sample_file = os.path.join(SETTING.MEDIA_ROOT, sample_file)
+
+    # Get scaffold list from samples file uploaded by user
+    scaffold_list_unsorted = SeqIO.parse(sample_file, "fasta")
+
+    # Sort descending by length of scaffolds
+    scaffold_list = sorted(list(scaffold_list_unsorted),
+                            key=lambda a: len(a),
+                            reverse=True)
+
+    # Pagination Code
+    page = request.GET.get('page',1)
+    paginator = Paginator(scaffold_list, 20)
+    try:
+        scaffolds = paginator.page(page)
+    except PageNotAnInteger:
+        scaffolds = paginator.page(1)
+    except EmptyPage:
+        scaffolds = paginator.page(paginator.num_pages)
+
+
+    # Get scaffold list from samples file uploaded by user
+    scaffold_indexed = SeqIO.to_dict(SeqIO.parse(sample_file, "fasta"))
+
+    # Get best hits
+    sample_file = str(sample.file)
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+    ac_file = os.path.join(sample_dir_path, 'ac_result.csv')
+    ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
+    pa_file = os.path.join(sample_dir_path, 'pa_result.csv')
+    if not os.path.exists(ac_file):
+        return redirect('run', pk=pk)
+    ac = pd.read_csv(ac_file, index_col=0)
+    ca = pd.read_csv(ca_file, index_col=0)
+    pa = pd.read_csv(pa_file, index_col=0)
+    
+    # Get scaffolds having all 3 - ARGs, MGEs, PATHOGENs
+    scaffold_intscn = np.intersect1d(ca.scaffold_id, np.intersect1d(ac.scaffold_id, pa.scaffold_id)).tolist()
+
+    return render(request, 'app/display_scaffolds.html', {'scaffolds': scaffolds, 'pk': pk, 'all': 1, 'scaffold_intscn': scaffold_intscn})
+
+@login_required
+def display_scaffolds(request, pk):
+
+    sample = get_object_or_404(Sample, pk=pk)
+    sample_file = str(sample.file)
+    sample_file = os.path.join(SETTING.MEDIA_ROOT, sample_file)
+
+    # Get scaffold list from samples file uploaded by user
+    scaffold_indexed = SeqIO.to_dict(SeqIO.parse(sample_file, "fasta"))
+
+    # Get best hits
+    sample_file = str(sample.file)
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+    ac_file = os.path.join(sample_dir_path, 'ac_result.csv')
+    ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
+    pa_file = os.path.join(sample_dir_path, 'pa_result.csv')
+    if not os.path.exists(ac_file):
+        return redirect('run', pk=pk)
+    ac = pd.read_csv(ac_file, index_col=0)
+    ca = pd.read_csv(ca_file, index_col=0)
+    pa = pd.read_csv(pa_file, index_col=0)
+    
+    # Get scaffolds having all 3 - ARGs, MGEs, PATHOGENs
+    scaffold_intscn = np.intersect1d(ca.scaffold_id, np.intersect1d(ac.scaffold_id, pa.scaffold_id)).tolist()  
+    common_scaffolds = [scaffold_indexed.get(key) for key in scaffold_intscn]
+
+    # Sort descending by length of scaffolds
+    common_scaffolds = sorted(common_scaffolds, key = len, reverse=True)
+
+    page = request.GET.get('page',1)
+    paginator = Paginator(common_scaffolds, 20)
+    try:
+        scaffolds = paginator.page(page)
+    except PageNotAnInteger:
+        scaffolds = paginator.page(1)
+    except EmptyPage:
+        scaffolds = paginator.page(paginator.num_pages)
+        
+    return render(request, 'app/display_scaffolds.html', {'scaffolds': scaffolds, 'pk': pk, 'scaffold_intscn': scaffold_intscn})
+
+@login_required
+def visualize_scaffold(request, pk, scaffold_id, length, sequence):
+
+    sample = get_object_or_404(Sample, pk=pk)
+    sample_file = str(sample.file)
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+    
+    ac_file = os.path.join(sample_dir_path, 'ac_result.csv')
+    ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
+    pa_file = os.path.join(sample_dir_path, 'pa_result.csv')
+
+    ac = pd.read_csv(ac_file, index_col=0)
+    ac = ac.loc[ac['scaffold_id'] == scaffold_id]
+
+    ca = pd.read_csv(ca_file, index_col=0)
+    ca = ca.loc[ca['scaffold_id'] == scaffold_id]
+
+    pa = pd.read_csv(pa_file, index_col=0)
+    pa = pa.loc[pa['scaffold_id'] == scaffold_id]
+
+    iterator = 1
+
+    def get_dict(row,group):
+        if isinstance(row['sub_id'],float):
+            content = 'null'
+        else:
+            content = row['sub_id']
+        if group == 1:
+            class_name = 'arg'
+        elif group == 2:
+            class_name = 'mge'
+        else:
+            class_name = 'pat'
+        start = row['qStart']
+        end = row['qEnd']
+
+        return {'id': iterator, 'group': group, 'content': content, 'className': class_name, 'start': start, 'end': end}
+
+    def get_hit(row,_type):
+        _type = _type
+        _id = row['sub_id']
+        start = row['qStart']
+        end = row['qEnd']
+        _sequence = sequence[start-1:end-1]
+
+        return {'id':_id, 'type':_type, 'start':start, 'end':end, "sequence":_sequence}
+        
+    data_set = []
+    hits = []
+    for idx, row in ca.iterrows():
+        data_set.append(get_dict(row,1))
+        hits.append(get_hit(row,"ARG"))
+        iterator += 1
+    
+    for idx, row in ac.iterrows():
+        data_set.append(get_dict(row,2))
+        hits.append(get_hit(row,"MGE"))
+        iterator += 1
+
+    for idx, row in pa.iterrows():
+        data_set.append(get_dict(row,3))
+        hits.append(get_hit(row,"PATHOGEN"))
+        iterator += 1
+    
+    data_set.append({'id': iterator, 'group': 0, 'content': scaffold_id, 'className': 'sequence', 'start': 1, 'end': length})
+    
+    return render(request, 'app/visualize_scaffold.html', {'pk':pk, 'data_set': data_set, 'length': length, 'sequence': sequence, 'scaffold_id': scaffold_id, 'hits':hits})

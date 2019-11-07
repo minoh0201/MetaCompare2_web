@@ -170,7 +170,7 @@
                                 <th class="text-left">Q(ARG, MGE, PAT)</th>
                                 <th class="text-left">Risk Score</th>
                                 <th class="text-left">Run Analysis</th>
-                                <!--<th class="text-left">Visualization</th>-->
+                                <th class="text-left">Visualization</th>
                                 <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -211,16 +211,28 @@
                                         </div>
                                     {% else %}
                                         <!--Run Sample-->
-                                        <a href="{% url 'run' pk=sample.pk %}">
+                                        <a href="{% url 'run' pk=sample.pk scaffold_id=' ' length=0 sequence=' '%}">
                                             <button type="button" class="btn btn-default" title="Run sample">
                                                 <i class="fa fa-play" style="font-size:16px"></i> Run
                                             </button>
                                         </a>
                                     {% endif %}
                                 </td>
-                                <!--<td class="text-left">
-
-                                </td>-->
+                                <td class="text-left">
+                                    {% if sample.stat == 1 %}
+                                        <a href="{% url 'display_scaffolds' pk=sample.pk %}">   
+                                            <button type="button" class="btn btn-default disabled" title="Run sample">
+                                                <i class="fa fa-eye" style="font-size:16px"></i> Visualize
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'display_scaffolds' pk=sample.pk %}">   
+                                            <button type="button" class="btn btn-default" title="Run sample">
+                                                <i class="fa fa-eye" style="font-size:16px"></i> Visualize
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </td>
                                 <td class="text-left">
                                     <!--Delete Sample-->
                                     <a class="confirm-delete" href="{% url 'sample_remove' pk=sample.pk %}">
