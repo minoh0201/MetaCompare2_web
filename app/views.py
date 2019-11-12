@@ -93,7 +93,7 @@ def my_project(request):
             sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
             filepath_output = os.path.join(sample_dir_path, "out.txt")
             # if result file exists, copy results to the sample instance
-            if os.path.isfile(filepath_output):
+            if os.path.isfile(filepath_output) & os.path.isfile(os.path.join(sample_dir_path,"pa_result.csv")):
                 with open(filepath_output, "r") as f:
                     res = f.readlines()[0].split(',')
                     vals = {"nContigs": res[0], "nARG": res[1], "nMGE": res[2], "nPAT": res[3],

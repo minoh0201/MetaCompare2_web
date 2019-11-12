@@ -1,0 +1,57 @@
+{% include "includes.html" %}
+
+<!-- Nav -->
+<nav id="nav" class="navbar">
+    <div class="container">
+
+        <div class="navbar-header">
+            <!-- Logo -->
+            <div class="navbar-brand">
+                <a href="{% url 'main' %}">
+
+                    <h2 class="logo">MetaCompareWeb <font size=5>(Beta)</font></h2>
+
+                    <!--
+                    <img class="logo" src="img/logo.png" alt="logo">
+                    <img class="logo-alt" src="img/logo-alt.png" alt="logo">a
+                    -->
+                </a>
+            </div>
+            <!-- /Logo -->
+
+            <!-- Collapse nav button -->
+            <div class="nav-collapse">
+                <span></span>
+            </div>
+            <!-- /Collapse nav button -->
+        </div>
+
+        <!--  Main navigation  -->
+        <ul class="main-nav nav navbar-nav navbar-right">
+            <li><a href="{% url 'main' %}">Home</a></li>
+
+
+            <!-- Menu !!
+
+            <li><a href="#service">Services</a></li>
+            <li><a href="#pricing">Prices</a></li>
+            <li><a href="#team">Team</a></li>
+            <li class="has-dropdown"><a href="#blog">Blog</a>
+                <ul class="dropdown">
+                    <li><a href="blog-single.html">blog post</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#contact">Contact</a></li>
+            -->
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'project' %}">My Project</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% endif %}
+        </ul>
+        <!-- /Main navigation -->
+
+    </div>
+</nav>
+<!-- /Nav -->
