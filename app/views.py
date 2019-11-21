@@ -332,7 +332,6 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
     pa = pd.read_csv(pa_file, index_col=0)
     pa = pa.loc[pa['scaffold_id'] == scaffold_id]
 
-    iterator = 1
 
     def get_dict(row,group):
         if isinstance(row['sub_id'],float):
@@ -341,14 +340,17 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
             content = row['sub_id']
         if group == 1:
             class_name = 'arg'
+            js_id = 'arg'+str(itr)
         elif group == 2:
             class_name = 'mge'
+            js_id = 'mge'+str(itr)
         else:
             class_name = 'pat'
+            js_id = 'pat'+str(itr)
         start = row['qStart']
         end = row['qEnd']
 
-        return {'id': iterator, 'group': group, 'content': content, 'className': class_name, 'start': start, 'end': end}
+        return {'id': js_id, 'group': group, 'content': content, 'className': class_name, 'start': start, 'end': end}
 
     def get_hit(row,_type):
         _type = _type
@@ -361,21 +363,31 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
         
     data_set = []
     hits = []
+
+    itr = 1
+    data_set.append({'id': 'arg0', 'group': 1, 'content': "", 'className': 'arg', 'start': -1, 'end': -1})
     for idx, row in ca.iterrows():
         data_set.append(get_dict(row,1))
         hits.append(get_hit(row,"ARG"))
-        iterator += 1
-    
+        itr += 1
+    data_set.append({'id': 'arg'+str(itr), 'group': 1, 'content': "", 'className': 'arg', 'start': length, 'end': length})
+
+    itr = 1
+    data_set.append({'id': 'mge0', 'group': 2, 'content': "", 'className': 'mge', 'start': -1, 'end': -1})
     for idx, row in ac.iterrows():
         data_set.append(get_dict(row,2))
         hits.append(get_hit(row,"MGE"))
-        iterator += 1
-
+        itr += 1
+    data_set.append({'id': 'mge'+str(itr), 'group': 2, 'content': "", 'className': 'mgr', 'start': length, 'end': length})
+    
+    itr = 1
+    data_set.append({'id': 'pat0', 'group': 3, 'content': "", 'className': 'pat', 'start': -1, 'end': -1})
     for idx, row in pa.iterrows():
         data_set.append(get_dict(row,3))
         hits.append(get_hit(row,"PATHOGEN"))
-        iterator += 1
+        itr += 1
+    data_set.append({'id': 'pat'+str(itr), 'group': 3, 'content': "", 'className': 'pat', 'start': length, 'end': length})
     
-    data_set.append({'id': iterator, 'group': 0, 'content': scaffold_id, 'className': 'sequence', 'start': 1, 'end': length})
+    data_set.append({'id': 'sequence', 'group': 0, 'content': scaffold_id, 'className': 'sequence', 'start': 1, 'end': length})
     
     return render(request, 'app/visualize_scaffold.html', {'pk':pk, 'data_set': data_set, 'length': length, 'sequence': sequence, 'scaffold_id': scaffold_id, 'hits':hits})

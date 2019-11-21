@@ -3,26 +3,35 @@
         {% include "includes.html" %}
         <!-- Some styles for visualization part -->
         <style type="text/css">
-            body, html {
-                font-family: sans-serif;
-            }
-            
             .vis-item.sequence{
-                background-color: lightgray;
+                background-color: lightskyblue;
                 border-width: 0;
             }
 
             .vis-item.arg{
                 background-color: salmon;
+                border-width: 0;
             }
 
             .vis-item.mge{
                 background-color: lightgreen;
+                border-width: 0;
             }
 
             .vis-item.pat{
                 background-color: purple;
                 color: white;
+                border-width: 0;
+            }
+
+            .vis-item{
+                margin-top:0.45%;
+                /* height: 100%; */
+                height: 70%;
+            }
+
+            .vis-inner, .vis-label{
+                min-height: 50px;
             }
         </style>
     </head>
@@ -81,26 +90,9 @@
         // DOM element where the Timeline will be attached
         var container = document.getElementById('visualization');
 
-        // Create a DataSet (allows two way data-binding)
         totalLength = {{ length }};
-        function getScaffoldId(){
-            return 'scaffold_3';
-        }
-        // scaffoldId = getScaffoldId();
+
         var items = new vis.DataSet( {{ data_set|safe }} );
-        // var items = new vis.DataSet([
-        //     {id: 1, group:2, content: 'item 1', className: 'mge', start: 90, end: 95},
-        //     {id: 2, group:2, content: 'item 2', className: 'mge', start: 10, end: 20},
-        //     {id: 3, group:2, content: 'item 3', className: 'mge', start: 20, end: 30},
-        //     {id: 4, group:1, content: 'item 4', className: 'arg', start: 30, end: 45},
-        //     {id: 5, group:1, content: 'item 5', className: 'arg', start: 60, end: 70},
-        //     {id: 6, group:3, content: 'item 6', className: 'pat', start: 90, end: 100},
-        //     {id: 7, group:0, content: 'A', className: 'sequence', start: 0, end: 1},
-        //     {id: 8, group:0, content: 'T', className: 'sequence', start: 1, end: 2},
-        //     {id: 9, group:0, content: 'A', className: 'sequence', start: 2, end: 3},
-        //     {id: 10, group:0, content: 'G', className: 'sequence', start: 3, end: 4},
-        //     {id: 11, group:0, content: 'C', className: 'sequence', start: 4, end: 5},
-        // ]);
 
         var groups = [
             {
@@ -112,29 +104,39 @@
             {
                 id: 1,
                 content: 'ARGs',
-                subgroupStack: false,
+                subgroupStack: true,
                 className: 'arg'
             },
             {
                 id: 2,
                 content: 'MGEs',
-                subgroupStack: false,
+                subgroupStack: true,
                 className: 'mge'
             },
             {
                 id:3,
                 content: 'Pathogens',
-                subgroupStack: false,
+                subgroupStack: true,
                 className: 'pat'
             }
         ]
+
         // Configuration for the Timeline
-        var options = {
+        const options = {
+            orientation:{
+                item: 'top'
+            },
+            margin:{
+                item:{
+                    vertical:10
+                }
+            },
             start: new Date(1),
             end: new Date(totalLength),
             min: new Date(1),
             max: new Date(totalLength),
             showMajorLabels:false,
+            selectable:false,
             format: {
                 minorLabels: function(date, scale, step) {
                     switch (scale) {
@@ -155,10 +157,127 @@
                     }
                 }
             },
+            // for lines
+            onInitialDrawComplete: function() {
+                drawDependencies(dependency);
+                timeline.on("changed", () => {
+                    drawDependencies(dependency);
+                });
+            }
         };
 
         // Create a Timeline
         var timeline = new vis.Timeline(container, items, groups, options);
+        
+        const getItemPos = function(item) {
+            left_x = item.left;
+            top_y = item.parent.top + item.parent.height- 8 - item.height;
+            return {
+                left: left_x,
+                top: top_y,
+                right: left_x + item.width,
+                bottom: top_y + item.height,
+                mid_x: left_x + item.width / 2,
+                mid_y: top_y + item.height / 2,
+                width: item.width,
+                height: item.height
+            };
+        };
+        const drawLines = function(i, j, index) {
+            console.log("read dependencyPath", dependencyPath);
+            var item_i = getItemPos(timeline.itemSet.items[i]);
+            var item_j = getItemPos(timeline.itemSet.items[j]);
+            if (item_j.mid_x < item_i.mid_x) [item_i, item_j] = [item_j, item_i];
+            var curveLen = item_i.height * 2;
+            dependencyPath[index].setAttribute(
+            "d",
+            "M " +
+                item_i.right +
+                " " +
+                item_i.mid_y +
+                " C " +
+                (item_i.right + curveLen) +
+                " " +
+                item_i.mid_y +
+                " " +
+                (item_j.left - curveLen) +
+                " " +
+                item_j.mid_y +
+                " " +
+                item_j.left +
+                " " +
+                item_j.mid_y
+            );
+        };
+        dependency = [];
+        itr = 0;
+        while(true){
+            _id0 = 'arg' + String(itr)
+            _id1 = 'arg' + String(itr+1)
+            if(timeline.itemSet.items[_id0]!=undefined && timeline.itemSet.items[_id1]!=undefined){
+                dependency.push([_id0,_id1])
+            }
+            else{
+                break;
+            }
+            itr++;
+        }
+        itr = 0;
+        while(true){
+            _id0 = 'mge' + String(itr)
+            _id1 = 'mge' + String(itr+1)
+            if(timeline.itemSet.items[_id0]!=undefined && timeline.itemSet.items[_id1]!=undefined){
+                dependency.push([_id0,_id1])
+            }
+            else{
+                break;
+            }
+            itr++;
+        }
+        itr = 0;
+        while(true){
+            _id0 = 'pat' + String(itr)
+            _id1 = 'pat' + String(itr+1)
+            if(timeline.itemSet.items[_id0]!=undefined && timeline.itemSet.items[_id1]!=undefined){
+                dependency.push([_id0,_id1])
+            }
+            else{
+                break;
+            }
+            itr++;
+        }
+        const drawDependencies = dependency => {
+            dependency.map((dep, index) => drawLines(...dep, index));
+        };
+        
+        // Create SVG layer on top of timeline "center" div.
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.style.position = "absolute";
+        svg.style.top = "0px";
+        svg.style.height = "100%";
+        svg.style.width = "100%";
+        svg.style.display = "block";
+        svg.style.zIndex = "1"; // Should it be above or below? (1 for above, -1 for below)
+        svg.style.pointerEvents = "none"; // To click through, if we decide to put it above other elements.
+        timeline.dom.center.appendChild(this.svg);
+        
+        // Add empty path (for now); it will be dynamically modified.
+        const dependencyPath = [];
+        for (let i = 0; i < dependency.length; i++) {
+            const somePath = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path"
+            );
+            somePath.setAttribute("d", "M 0 0");
+            somePath.setAttribute("marker-end", "url(#arrowhead0)");
+            somePath.style.stroke = "#444";
+            somePath.style.strokeWidth = "2px";
+            somePath.style.fill = "none";
+            dependencyPath.push(somePath);
+            console.log("add somepath to dependencyPath", somePath);
+            svg.appendChild(somePath);
+        }
+        
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>        
