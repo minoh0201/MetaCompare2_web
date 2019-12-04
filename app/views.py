@@ -121,7 +121,7 @@ def my_project(request):
                     sample.stat = 2
                     sample.save()
 
-    return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
+    return render(request, 'app/project.html', {'projects': projects, 'username':request.user.username})#, 'samples': samples})
 
 from testapp.tasks import runSample
 import webapp.settings as SETTING
@@ -262,7 +262,8 @@ def display_all_scaffolds(request, pk):
     ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
     pa_file = os.path.join(sample_dir_path, 'pa_result.csv')
     if not os.path.exists(ac_file):
-        return redirect('run', pk=pk)
+        return redirect('confirm_run', pk=pk)
+        # return redirect('run', pk=pk)
     ac = pd.read_csv(ac_file, index_col=0)
     ca = pd.read_csv(ca_file, index_col=0)
     pa = pd.read_csv(pa_file, index_col=0)
@@ -271,6 +272,10 @@ def display_all_scaffolds(request, pk):
     scaffold_intscn = np.intersect1d(ca.scaffold_id, np.intersect1d(ac.scaffold_id, pa.scaffold_id)).tolist()
 
     return render(request, 'app/display_scaffolds.html', {'scaffolds': scaffolds, 'pk': pk, 'all': 1, 'scaffold_intscn': scaffold_intscn})
+
+@login_required
+def confirm_run(request, pk):
+    return render(request, 'app/confirm_run.html', {'pk':pk})
 
 @login_required
 def display_scaffolds(request, pk):
@@ -289,7 +294,8 @@ def display_scaffolds(request, pk):
     ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
     pa_file = os.path.join(sample_dir_path, 'pa_result.csv')
     if not os.path.exists(ac_file):
-        return redirect('run', pk=pk)
+        return redirect('confirm_run', pk=pk)
+        # return redirect('run', pk=pk)
     ac = pd.read_csv(ac_file, index_col=0)
     ca = pd.read_csv(ca_file, index_col=0)
     pa = pd.read_csv(pa_file, index_col=0)

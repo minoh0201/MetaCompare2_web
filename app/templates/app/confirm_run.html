@@ -1,0 +1,7 @@
+<script>
+    if (confirm('Your visualizations are not ready! your sample needs to run again to prepare it for visualization. Continue?')) {
+        location.href = '/run/{{pk}}';
+    } else {
+        location.href = '/project/';
+    }
+</script>

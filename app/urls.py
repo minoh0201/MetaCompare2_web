@@ -17,4 +17,5 @@ urlpatterns = [
     path('visualize_scaffold/<int:pk>/<str:scaffold_id>/<int:length>/<str:sequence>', views.visualize_scaffold, name='visualize_scaffold'),
     path('display_scaffolds/<int:pk>', views.display_scaffolds, name='display_scaffolds'),
     path('display_all_scaffolds/<int:pk>', views.display_all_scaffolds, name='display_all_scaffolds'),
+    path('confirm_run/<int:pk>', views.confirm_run, name='confirm_run'),
 ]
