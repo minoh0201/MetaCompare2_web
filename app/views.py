@@ -397,3 +397,6 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
     data_set.append({'id': 'sequence', 'group': 0, 'content': scaffold_id, 'className': 'sequence', 'start': 1, 'end': length})
     
     return render(request, 'app/visualize_scaffold.html', {'pk':pk, 'data_set': data_set, 'length': length, 'sequence': sequence, 'scaffold_id': scaffold_id, 'hits':hits})
+
+def how_to(request):
+    return render(request, 'app/how_to.html')

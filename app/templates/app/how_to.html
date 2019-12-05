@@ -1,0 +1,92 @@
+{% load static %}
+<html>
+    <head>
+        {% include "includes.html" %}
+        <style>
+            .list-group {
+                list-style: decimal outside !important
+            }
+
+            .list-group-item {
+                display: list-item !important
+            }
+            img {
+                height: auto;
+                width: 70%;
+            }
+        </style>
+    </head>
+    <body>
+        {% include "nav.html" %}
+
+        <div class="container">
+            <h3>Steps for using Metacompare : </h3>
+            <ol class="list-group">
+                <li class="list-group-item">
+                    <b>Login to the system using your credentials.</b> <br>
+                    If you do not have an account, use the guest account. <br>
+                    <i>Note : You cannot upload or run samples using guest account, but you can visualize the samples and see the result.</i> <br>
+                    <b>Credentials for guest account:</b> <br>
+                    &nbsp&nbsp Username : guest <br>
+                    &nbsp&nbsp Password : metacompare <br>
+                    OR <br>
+                    create a new account to access all the features.
+                </li>
+                <li class="list-group-item">
+                    From navigation select ‘My Project’. <br>
+                    <img src="{% static './img/1.png' %}" alt="Image of home screen highlighing link to 'My Project'">
+                </li>
+                <li class="list-group-item">
+                    Click on ‘Add Project’ [skip this step if you already have a project you want to work with]. <br>
+                    <img src="{% static './img/2.png' %}" alt="Image of my project page highlighing button to 'Add Project'">
+                </li>
+                <li class="list-group-item">
+                    Type project name and click on ‘submit’ button[skip this step if you already have a project you want to work with]. <br>
+                    <img src="{% static './img/3.png' %}" alt="Image of project upload form'">
+                </li>
+                <li class="list-group-item">
+                    Click on ‘Upload Samples’ button. <br>
+                    <img src="{% static './img/4.png' %}" alt="Image of my project page highlighting link to 'Upload Samples'">
+                </li>
+                <li class="list-group-item">
+                    Read the given instructions and fill out the form.
+                    <ul class="list-group" style="max-width:50%; padding-left: 5%;">
+                        <li class="list-group-item">Read the instructions on the website.</li>
+                        <li class="list-group-item">Select the project you want to add a new sample to.</li>
+                        <li class="list-group-item">Enter sample name.</li>
+                        <li class="list-group-item">Upload FASTA file containing assembled sequences.</li>
+                        <li class="list-group-item">Click on Add more samples [if required].</li>
+                        <li class="list-group-item">Click on ‘upload’ button.</li>
+                    </ul>
+                    <img src="{% static './img/5.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    Click on ‘Run’ button in front of the sample you created in step 6. <br>
+                    <img src="{% static './img/6.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    This will take some time depending upon the size of the sample FASTA file.<br>
+                    <img src="{% static './img/7.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    You can see the results [resistome risk score and some other things] in front of each sample. The meaning of given results is explained here[some_url]. <br>
+                    <img src="{% static './img/8.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    To see visualizations of the scaffolds in terms of ARGs, MGEs and Pathogens, Click on ‘Visualize’ button.<br>
+                    <img src="{% static './img/9.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    Click on ‘Visualize’ button in front of a scaffold to visualize that scaffold.<br>
+                    <img src="{% static './img/10.png' %}" alt="Image of ">
+                </li>
+                <li class="list-group-item">
+                    Read the instructions and see the visualizations.<br>
+                    <img src="{% static './img/11.png' %}" alt="Image of ">
+                </li>
+            </ol>
+        </div>
+
+        {% include "footer.html" %}
+    </body>
+</html>

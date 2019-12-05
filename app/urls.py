@@ -18,4 +18,5 @@ urlpatterns = [
     path('display_scaffolds/<int:pk>', views.display_scaffolds, name='display_scaffolds'),
     path('display_all_scaffolds/<int:pk>', views.display_all_scaffolds, name='display_all_scaffolds'),
     path('confirm_run/<int:pk>', views.confirm_run, name='confirm_run'),
+    path('how_to', views.how_to, name='how_to'),
 ]

@@ -30,30 +30,24 @@
         <ul class="main-nav nav navbar-nav navbar-right">
             <li><a href="{% url 'main' %}">Home</a></li>
 
-
-            <!-- Menu !!
-
-            <li><a href="#service">Services</a></li>
-            <li><a href="#pricing">Prices</a></li>
-            <li><a href="#team">Team</a></li>
-            <li class="has-dropdown"><a href="#blog">Blog</a>
+            <li class="has-dropdown">
+                <a href="#">Help</a>
                 <ul class="dropdown">
-                    <li><a href="blog-single.html">blog post</a></li>
+                    <li><a href="{% url 'how_to' %}">How to</a></li>
+                    {% if user.is_authenticated %}
+                        {% if user.username == 'guest' %}
+                        {% else %}
+                            <li><a href="{% url 'change_password' %}">Change password</a></li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
             </li>
 
-            <li><a href="#contact">Contact</a></li>
-            -->
-
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'project' %}">My Project</a></li>
-                    {% if user.username == 'guest' %}
-                        <!-- <li><a href="{% url 'change_password' %}">Change password</a></li> -->
-                    {% else %}
-                        <li><a href="{% url 'change_password' %}">Change password</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% endif %}
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'project' %}">My Project</a></li>
+                
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% endif %}
         </ul>
         <!-- /Main navigation -->
 
