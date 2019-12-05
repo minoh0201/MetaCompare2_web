@@ -47,7 +47,7 @@
 
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'project' %}">My Project</a></li>
-                    {% if username == 'guest' %}
+                    {% if user.username == 'guest' %}
                         <!-- <li><a href="{% url 'change_password' %}">Change password</a></li> -->
                     {% else %}
                         <li><a href="{% url 'change_password' %}">Change password</a></li>

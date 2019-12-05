@@ -121,7 +121,7 @@ def my_project(request):
                     sample.stat = 2
                     sample.save()
 
-    return render(request, 'app/project.html', {'projects': projects, 'username':request.user.username})#, 'samples': samples})
+    return render(request, 'app/project.html', {'projects': projects})#, 'samples': samples})
 
 from testapp.tasks import runSample
 import webapp.settings as SETTING

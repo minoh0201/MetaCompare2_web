@@ -12,7 +12,7 @@
             <div class="header-wrapper short-padding bg-grey">
                 <div class="container">
                     <div class="breadcrumb">
-                        {% if username == 'guest' %}
+                        {% if user.username == 'guest' %}
                             <button type="button" id="disabled" class="btn btn-info disabled" title="You need to create an account to access this feature">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Upload Samples
                             </button>
@@ -25,7 +25,7 @@
                         {% endif %}
                     </div>
                     <div class="breadcrumb">
-                        {% if username == 'guest' %}
+                        {% if user.username == 'guest' %}
                             <button type="button" id="disabled" class="btn btn-info disabled" title="You need to create an account to access this feature">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Project
                             </button>
@@ -138,7 +138,7 @@
                                                     <i class="fa fa-play" style="font-size:16px"></i> Run
                                                 </button>
                                             </a> -->
-                                            {% if username == 'guest' %}
+                                            {% if user.username == 'guest' %}
                                                 <button type="button" id="disabled" class="btn btn-default disabled" title="You need to create an account to access this feature">
                                                     <i class="fa fa-play" aria-hidden="true"></i> Run
                                                 </button>
@@ -153,11 +153,9 @@
                                     </td>
                                     <td class="text-left">
                                         {% if sample.stat == 1 %}
-                                            <a href="{% url 'display_scaffolds' pk=sample.pk %}">   
-                                                <button type="button" class="btn btn-default disabled" title="Run sample">
-                                                    <i class="fa fa-eye" style="font-size:16px"></i> Visualize
-                                                </button>
-                                            </a>
+                                            <button type="button" class="btn btn-default disabled" title="Run sample">
+                                                <i class="fa fa-eye" style="font-size:16px"></i> Visualize
+                                            </button>
                                         {% else %}
                                             <a href="{% url 'display_scaffolds' pk=sample.pk %}">   
                                                 <button type="button" class="btn btn-default" title="Run sample">
