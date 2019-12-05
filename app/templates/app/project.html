@@ -58,11 +58,17 @@
                             <h3>{{ project }}</h3>
                             <div class="author-social">
                                 <!--Run All-->
-                                <a href="{% url 'run_all' pk=project.pk %}" title="Run all samples">
-                                    <button type="button" class="btn btn-default">
-                                        <i class="fa fa-play" style="font-size:24px"></i>
-                                    </button>
-                                </a>
+                                {% if user.username == 'guest' %}
+                                <button type="button" id="disabled" class="btn btn-default disabled">
+                                    <i class="fa fa-play" style="font-size:24px"></i>
+                                </button>
+                                {% else %}
+                                    <a href="{% url 'run_all' pk=project.pk %}" title="Run all samples">
+                                        <button type="button" class="btn btn-default">
+                                            <i class="fa fa-play" style="font-size:24px"></i>
+                                        </button>
+                                    </a>
+                                {% endif %}
                                 <!--Download as a CSV file-->
                                 <a href="{% url 'export_csv' pk=project.pk %}">
                                     <button type="button" class="btn btn-default" title="Download result as a CSV file">
@@ -70,11 +76,17 @@
                                     </button>
                                 </a>
                                 <!--Delete Project-->
-                                <a class="confirm-delete" href="{% url 'project_remove' pk=project.pk %}">
-                                    <button type="button" class="btn btn-default" title="Delete Project">
+                                {% if user.username == 'guest' %}
+                                    <button type="button" id="disabled" class="btn btn-default disabled" title="Delete Project">
                                         <i class="fa fa-trash" style="font-size:24px"></i>
                                     </button>
-                                </a>
+                                {% else %}
+                                    <a class="confirm-delete" href="{% url 'project_remove' pk=project.pk %}">
+                                        <button type="button" class="btn btn-default" title="Delete Project">
+                                            <i class="fa fa-trash" style="font-size:24px"></i>
+                                        </button>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -166,11 +178,17 @@
                                     </td>
                                     <td class="text-left">
                                         <!--Delete Sample-->
-                                        <a class="confirm-delete" href="{% url 'sample_remove' pk=sample.pk %}">
-                                            <button type="button" class="btn btn-default" title="Delete sample">
+                                        {% if user.username == 'guest' %}
+                                            <button type="button" id="disabled" class="btn btn-default disabled" title="Delete sample">
                                                 <i class="fa fa-trash" style="font-size:16px"></i>
                                             </button>
-                                        </a>
+                                        {% else %}
+                                            <a class="confirm-delete" href="{% url 'sample_remove' pk=sample.pk %}">
+                                                <button type="button" class="btn btn-default" title="Delete sample">
+                                                    <i class="fa fa-trash" style="font-size:16px"></i>
+                                                </button>
+                                            </a>
+                                        {% endif %}
                                     </td>
 
                                 </tr>
