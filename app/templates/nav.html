@@ -30,22 +30,22 @@
         <ul class="main-nav nav navbar-nav navbar-right">
             <li><a href="{% url 'main' %}">Home</a></li>
 
-            <li class="has-dropdown">
-                <a href="#">Help</a>
-                <ul class="dropdown">
-                    <li><a href="{% url 'how_to' %}">How to</a></li>
-                    {% if user.is_authenticated %}
-                        {% if user.username == 'guest' %}
-                        {% else %}
-                            <li><a href="{% url 'change_password' %}">Change password</a></li>
-                        {% endif %}
-                    {% endif %}
-                </ul>
-            </li>
-
             {% if user.is_authenticated %}
                 <li><a href="{% url 'project' %}">My Project</a></li>
-                
+            {% endif %}
+                <li class="has-dropdown">
+                    <a href="#">Help</a>
+                    <ul class="dropdown">
+                        <li><a href="{% url 'how_to' %}">How to</a></li>
+                        {% if user.is_authenticated %}
+                            {% if user.username == 'guest' %}
+                            {% else %}
+                                <li><a href="{% url 'change_password' %}">Change password</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </li>
+            {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}">Logout</a></li>
             {% endif %}
         </ul>
