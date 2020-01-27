@@ -63,30 +63,50 @@
         <br>
         <br>
         <!-- Show all hits -->
-        <div style="margin-left:2%; margin-right:2%; max-width: 100%;">
-            <table class="table-fill" >
-                <thead>
-                    <tr>
-                        <th class="text-center">Type</th>
-                        <th class="text-center">Reference database ID</th>
-                        <th class="text-center">Start</th>
-                        <th class="text-center">End</th>
-                        <th class="text-center">Sequence</th>
-                    </tr>
-                </thead>
-                <tbody class="table-hover">
-                    {% for hit in hits %}
-                    <tr>
-                        <td class="text-center">{{ hit.type }}</td>
-                        <td class="text-center">{{ hit.id }}</td>
-                        <td class="text-center">{{ hit.start }}</td>
-                        <td class="text-center">{{ hit.end }}</td>
-                        <td class="text-center"><a href="">{{ hit.sequence|truncatechars:40 }}</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>    
+        
+        <div style="margin-left:2%; margin-right:2%; max-width: 100%;" class="blog-author">
+            <div class="media">
+                <div class="media-body">
+                    <div class="media-heading">
+                        <h3>Results</h3>
+                        <div class="author-social">
+                            <!--Download as a CSV file-->
+                            <a href="{% url 'export_csv_hits' scaffold_id=scaffold_id pk=pk %}" style="align-self:flex-end;">
+                                <button type="button" class="btn btn-default" title="Download result as a CSV file">
+                                    <i class="fa fa-file-text" style="font-size:24px"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <table class="table-fill" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Reference database ID</th>
+                                <th class="text-center">Start</th>
+                                <th class="text-center">End</th>
+                                <th class="text-center">Sequence</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-hover">
+                            {% for hit in hits %}
+                            <tr>
+                                <td class="text-center">{{ hit.type }}</td>
+                                <td class="text-center">{{ hit.id }}</td>
+                                <td class="text-center">{{ hit.start }}</td>
+                                <td class="text-center">{{ hit.end }}</td>
+                                <td class="text-center"><span title="Download results as csv to see the sequence">{{ hit.sequence|truncatechars:40 }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
+        
+
         <br>
         {% include "footer.html" %}
     </body>

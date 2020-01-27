@@ -221,6 +221,7 @@ def project_remove(request, pk):
 import pandas as pd
 import numpy as np
 import operator
+import csv
 
 from Bio import SeqIO
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -395,8 +396,39 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
     data_set.append({'id': 'pat'+str(itr), 'group': 3, 'content': "", 'className': 'pat', 'start': length, 'end': length})
     
     data_set.append({'id': 'sequence', 'group': 0, 'content': scaffold_id, 'className': 'sequence', 'start': 1, 'end': length})
+
+
+    file_name = os.path.join(sample_dir_path,scaffold_id+'.csv')
+    keys = hits[0].keys()
+    with open(file_name, 'w') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(hits)
     
     return render(request, 'app/visualize_scaffold.html', {'pk':pk, 'data_set': data_set, 'length': length, 'sequence': sequence, 'scaffold_id': scaffold_id, 'hits':hits})
+
+@login_required
+def export_csv_hits(request, scaffold_id, pk):
+    sample = get_object_or_404(Sample, pk=pk)
+    sample_file = str(sample.file)
+    sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+
+    file_name = os.path.join(sample_dir_path,scaffold_id+'.csv')
+    with open(file_name, newline='') as f:
+        reader = csv.reader(f)
+        hits = list(reader)
+
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = 'attachment; filename=' + scaffold_id + '.csv'
+
+    writer = csv.writer(response)
+
+    for hit in hits:
+        writer.writerow([str(x) for x in hit])
+
+    return response
+
 
 def how_to(request):
     return render(request, 'app/how_to.html')

@@ -43,19 +43,29 @@
 <!-- /Background Image -->
 
 <!-- templates/registration/login.html -->
-<div class="login-page">
-  <center><h2 class="white-text" class="logo">MetaCompare</h2></center>
-  <center><h2 class="white-text" class="logo">Login</h2></center>
-  <form class = "contact-form" method="post">
-    <p class="white-text">
-    {% csrf_token %}
-    {{ form.as_p }}
-    </p>
-    <button class="main-btn" type="submit">Login</button>
-  </form>
-  <center>
-    <h6 class="white-text">Not registered? <a href="{% url 'signup' %}">Create an account</a></h6>
-  </center>
+<div class="login-page" style="width: 40%;">
+	<center><h2 class="white-text" class="logo">MetaCompare</h2></center>
+	<center><h2 class="white-text" class="logo">Login</h2></center>
+	<div>
+		<form class = "contact-form col-md-6" method="post">
+			<p class="white-text">
+			{% csrf_token %}
+			{{ form.as_p }}
+			</p>
+			<button class="main-btn" type="submit">Login</button>
+		</form>
+		<form style="margin-top: 15%;" class = "contact-form col-md-6" method="post">
+			{% csrf_token %}
+			<input style="visibility: hidden; position:fixed;" type="text" name="username" value="guest">
+			<input style="visibility: hidden; position:fixed;" type="password" name="password" value="metacompare">
+			<button class="main-btn" type="submit">Guest Login</button>
+		</form>
+		<div class="cold-md-12">
+			<center>
+				<h6 class="white-text">Not registered? <a href="{% url 'signup' %}">Create an account</a></h6>
+			</center>
+		</div>
+	</div>
 </div>
 </body>
 </html>
