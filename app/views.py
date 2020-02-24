@@ -320,11 +320,12 @@ def display_scaffolds(request, pk):
     return render(request, 'app/display_scaffolds.html', {'scaffolds': scaffolds, 'pk': pk, 'scaffold_intscn': scaffold_intscn})
 
 @login_required
-def visualize_scaffold(request, pk, scaffold_id, length, sequence):
+def visualize_scaffold(request, pk, scaffold_id):
 
     sample = get_object_or_404(Sample, pk=pk)
     sample_file = str(sample.file)
     sample_dir_path = os.path.join(SETTING.MEDIA_ROOT, "/".join(sample_file.split("/")[:-1]))
+    sample_file = os.path.join(SETTING.MEDIA_ROOT, sample_file)
     
     ac_file = os.path.join(sample_dir_path, 'ac_result.csv')
     ca_file = os.path.join(sample_dir_path, 'ca_result.csv')
@@ -339,6 +340,11 @@ def visualize_scaffold(request, pk, scaffold_id, length, sequence):
     pa = pd.read_csv(pa_file, index_col=0)
     pa = pa.loc[pa['scaffold_id'] == scaffold_id]
 
+    # Get scaffold list from samples file uploaded by user
+    scaffold_indexed = SeqIO.to_dict(SeqIO.parse(sample_file, "fasta"))
+
+    sequence = str(scaffold_indexed[scaffold_id].seq)
+    length = len(scaffold_indexed[scaffold_id])
 
     def get_dict(row,group):
         if isinstance(row['sub_id'],float):

@@ -65,7 +65,7 @@
 						<div class="col-md-4 text-center" {% if scaffold.id in scaffold_intscn %} style='color:#007bff;' {% endif %}>{{ scaffold.id }}</div>
 						<div class="col-md-4 text-center" {% if scaffold.id in scaffold_intscn %} style='color:#007bff;' {% endif %}>{{ scaffold|length }}</div>
 						<div class="text-center">
-							<a href="{% url 'visualize_scaffold' pk=pk scaffold_id=scaffold.id length=scaffold|length sequence=scaffold.seq %}">   
+							<a href="{% url 'visualize_scaffold' pk=pk scaffold_id=scaffold.id %}">   
 								<button type="button" class="btn btn-default{% if scaffold.id in scaffold_intscn %} btn-info {% endif %}" title="Run sample">
 									<i class="fa fa-eye" style="font-size:16px"></i> Visualize
 								</button>
